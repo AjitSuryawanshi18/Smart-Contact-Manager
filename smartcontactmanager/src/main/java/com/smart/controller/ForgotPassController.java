@@ -45,7 +45,7 @@ public class ForgotPassController {
 //	handler for sending otp
 	@PostMapping("/send-otp")
 	public String sendOtp(@RequestParam("email_forgotpass") String email_forgotpass, HttpSession session) {
-		System.out.println("email for fprgot password " + email_forgotpass);
+		System.out.println("email for forgot password " + email_forgotpass);
 
 //		generating otp of 6 digit
 //		random object is at top for proper working
@@ -78,7 +78,8 @@ public class ForgotPassController {
 	}
 
 //	verify otp handler
-	@PostMapping("/verify_otp")
+	
+	@PostMapping("/verifyy_otp")
 	public String verifyOtp(@RequestParam("user_filled_otp") Integer user_filled_otp,HttpSession session) {
 		
 		Integer myOtp=(Integer) session.getAttribute("session_otp");
@@ -103,9 +104,9 @@ public class ForgotPassController {
 				
 			}else {
 				//send change password form
+				return "/change_password";
 			}
 			
-			return "/change_password";
 		}else {
 
 			session.setAttribute("message", "YOu Entered Wrong Otp Please try Again...!!");
@@ -113,7 +114,12 @@ public class ForgotPassController {
 		}
 	}
 	
-//	handler for /change-password
+	
+	
+	
+	
+	
+//	handler for /change-password from settings
 	@PostMapping("/change-password")
 	public String changePassword(@RequestParam("newPassword") String newpassword, HttpSession session) {
 		
