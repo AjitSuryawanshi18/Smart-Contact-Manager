@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="normal/user_base::Layout(~{::section})">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>this is about page</title>
+</head>
+<!--ml mr mb-5 reduceCardMarginTop-->
+
+<body>
+	<section>
+
+		<div class="container">
+
+			<div class="card ml mr ">
+
+				<div class="card-body">
+
+					<h1 class="text-center text-success">ADD CONTACT</h1>
+
+					<div class="container-fluid mt-1">
+
+						<div class="row">
+
+							<div class="col-md-8 offset-md-2">
+
+								<form action="#" th:object="${contact}" method="post"
+									th:action="@{/user/process-contact}" enctype="multipart/form-data">
+
+									<!--first name-->
+
+									<div class="input-group flex-nowrap">
+										<div class="input-group-prepend">
+											<span class="input-group-text" id="addon-wrapping"><i
+													class="fa-solid fa-plus" style="height: 24px;"></i></span>
+										</div>
+										<input name="name" id="firstName" type="text" class="form-control"
+											placeholder="Enter Name Here" aria-label="Username"
+											aria-describedby="addon-wrapping" required>
+									</div>
+
+									<!--Second name-->
+
+									<div class="input-group flex-nowrap mt-3">
+										<div class="input-group-prepend">
+											<span class="input-group-text" id="addon-wrapping"><i
+													class="fas fa-user-alt" style="height: 24px;"></i></span>
+										</div>
+										<input name="secondName" type="text" id="lastName" class="form-control"
+											placeholder="Enter Nick Name Here" aria-label="Nickname"
+											aria-describedby="addon-wrapping" required>
+									</div>
+
+									<!--Phone number-->
+
+									<div class="input-group flex-nowrap mt-3">
+										<div class="input-group-prepend">
+											<span class="input-group-text" id="addon-wrapping"><i class="fas fa-phone"
+													style="height: 24px;"></i></span>
+										</div>
+										<input name="phone" type="number" id="phoneNumber" class="form-control"
+											placeholder="Enter Phone Number Here" aria-label="phoneNumber"
+											aria-describedby="addon-wrapping" required min="10">
+									</div>
+
+									<!--Email-->
+
+									<div class="input-group flex-nowrap mt-3">
+										<div class="input-group-prepend">
+											<span class="input-group-text" id="addon-wrapping">@</span>
+										</div>
+										<input name="email" type="email" id="Email" class="form-control"
+											placeholder="Enter Email Address Here" aria-label="Email"
+											aria-describedby="addon-wrapping" required>
+									</div>
+
+									<!--Work-->
+
+									<div class="input-group flex-nowrap mt-3">
+										<div class="input-group-prepend">
+											<span class="input-group-text" id="addon-wrapping"><i
+													class="fa fa-briefcase" style="height: 24px;"></i></span>
+										</div>
+										<input name="work" type="text" id="work" class="form-control"
+											placeholder="Enter Work Here" aria-label="work"
+											aria-describedby="addon-wrapping" required>
+									</div>
+
+									<!--About Contact description-->
+
+									<div class="input-group flex-nowrap mt-3">
+										<textarea name="description" type="text" class="form-control"
+											placeholder="Enter contact description Here" id="mytextarea"
+											aria-label="description" aria-describedby="addon-wrapping" rows="10"
+											cols="30"></textarea>
+									</div>
+
+									<!--Image Upload-->
+
+									<div class="custom-file mt-3">
+										<input type="file" name="profileImage" />
+									</div>
+
+									<div class="container mt-3 text-center">
+										<button class="btn btn-outline-success">Add Contact</button>
+									</div>
+
+								</form>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!--tinyMCE editor in description-->
+		<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+		<script>
+			tinymce.init({
+				selector: '#mytextarea'
+			});
+		</script>
+
+
+		<script>
+
+			$(document).ready(() => {
+				$(".item").removeClass(".active");
+				$("#addContacts-link").addClass("active");
+			});
+
+		</script>
+
+	</section>
+</body>
+
+</html>

@@ -1,0 +1,181 @@
+body{
+	background-color: #e2e2e2;
+}
+.bg-primary{
+	background-color:#e3f2fd !important;
+}
+.banner{
+	width: 100%;
+	height: 92vh;
+	background: linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)) ,url(../image/calling-to-friends-phone-38463793.webp);
+	color: white;
+	background-size: cover;
+}
+.card{
+	padding: 10px;
+}
+#no-underline {
+  text-decoration: none;
+}
+
+/*custom login page start*/
+
+
+#login .container #login-row #login-column #login-box {
+  margin-top: 100px;
+  max-width: 600px;
+  height: 430px;
+  border: 1px solid #9C9C9C;
+  border-radius: 20px;
+  background-color: white;
+}
+#login .container #login-row #login-column #login-box #login-form {
+  padding: 20px;
+}
+#login .container #login-row #login-column #login-box #login-form .register-link {
+  margin-top: -35px;
+}
+.register-link{
+	margin-left: 28vw;
+}
+#forgotpass-link{
+	margin-left: 10vw;
+	margin-top: -35px;
+}
+
+/*#bg-image{
+background-image: url(https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=);
+}*/
+
+/*custom login page end*/
+
+/*login failure page start*/
+.error-template {padding: 40px 15px;text-align: center;}
+.error-actions {margin-top:15px;margin-bottom:15px;}
+.error-actions .btn { margin-right:10px; } 
+
+/*login failure page end*/
+
+
+
+/*side bar coding start*/
+
+/*not working its ok neglect it*/
+@media only screen and (max-width:600px){
+	.sidebar{
+	display: none;
+	width: 80% !important;
+	height: 100%;
+	background-color:white;
+	position: fixed;
+	padding-top: 20px;
+}
+	.content{
+	margin-left: 0% !important;
+}
+}
+
+
+
+
+
+
+.sidebar{
+	width: 20%;
+	height: 100%;
+	background-color:white;
+	position: fixed;
+	padding-top: 40px;
+	z-index: 99999999999999999999999999999999999999999999;
+}
+.sidebar a{
+	display: block;
+	width: 100%;
+	padding: 10px 30px ;
+	text-decoration: none;
+	color: darkgray;
+}
+.sidebar a:hover{
+	background:#e3f2fd;
+	color: black;
+}
+
+.sidebar .divider{
+	height:  0.5px;
+	width: 100%;
+	background: #e2e2e2;
+	margin-top: 10px;
+}
+.sidebar .crossBtn{
+	position: absolute;
+	top: 10px;
+	right: 35px;
+	font-size: 30px;
+	cursor: pointer;
+}
+
+
+
+.content{
+	margin-left: 20%;
+}
+.content i{
+	cursor: pointer;
+}
+.ml{
+	margin-left: 150px;
+}
+.mr{
+	margin-right: 150px;
+}
+.reduceCardMarginTop{
+	margin-top: -10px;
+	
+}
+
+/*side bar coding end*/
+/*profile photo image setting start*/
+
+.my_profile_picture{
+	width: 40px;
+	height: 40px;
+	object-fit: cover;
+	border-radius: 50%;
+	border: 1 px solid black;
+}
+
+/*profile photo image setting end*/
+
+.my_profile_picture1{
+	width: 70px;
+	height: 70px;
+	object-fit: cover;
+	border-radius: 50%;
+	border: 1 px solid black;
+}
+/*search bar coding start*/
+.search-container{
+	position:relative;
+}
+.search-result{
+	position:absolute;
+	background-color: white;
+	width: 100%;
+	padding: 15px;
+	border: 1px darkgrey;
+	display: none;
+}
+
+/*search bar coding end*/
+
+/*active staus on side bar start */
+
+.active{
+	background-color: #9cd1f8;
+	color: rgb(255, 255, 128);
+}
+
+/*active staus on side bar end */
+
+
+

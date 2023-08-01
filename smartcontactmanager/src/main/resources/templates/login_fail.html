@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Invalid Username Or Password </title>
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<style>
+	
+	body{
+		
+		color: red;
+	}
+	.bg-color{
+		background-color:black ;
+	}
+</style>
+<body>
+
+
+
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 ">
+				<div class="error-template bg-color">
+					<h1>
+						Oops!</h1>
+					<h2>
+						Invalid Username Or Password</h2>
+					<div class="error-details">
+						Sorry, an error has occured, Please Try Again To login !
+					</div>
+					<br />
+					<br />
+					<div >
+						<button> <a th:href="@{/user/index}" id="no-underline"> Try Again
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+</body>
+
+</html>
