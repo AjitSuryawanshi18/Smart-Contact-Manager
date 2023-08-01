@@ -67,12 +67,14 @@ public class ForgotPassController {
 			session.setAttribute("session_otp", otp);
 			session.setAttribute("session_email", email_forgotpass);
 
-			return "/verify_otp";
+			return "verify_otp";
+//			return "/verify_otp";
 
 		} else {
 			session.setAttribute("message", "Your otp not sent !! please check your email id  ");
 
-			return "/forgot_email_form";
+			return "forgot_email_form";
+//			return "/forgot_email_form";
 		}
 
 	}
@@ -100,17 +102,20 @@ public class ForgotPassController {
 				
 				session.setAttribute("message", "user does not exists with this email id...!  ");
 
-				return "/forgot_email_form";
+				return "forgot_email_form";
+//				return "/forgot_email_form";
 				
 			}else {
 				//send change password form
-				return "/change_password";
+				return "change_password";
+//				return "/change_password";
 			}
 			
 		}else {
 
 			session.setAttribute("message", "YOu Entered Wrong Otp Please try Again...!!");
-		return "/verify_otp";
+		return "verify_otp";
+//		return "/verify_otp";
 		}
 	}
 	
