@@ -29,7 +29,25 @@ if(query == ''){
 //console.log(query);
 
 //sending request to the server
-let url=`http://localhost:9091/search/${query}`;
+
+/*  it is provide whole url i.e. localhost:9091/user/contact/1 etc
+var pathname = window.location.href;
+console.log(pathname);*/
+
+/*it is provide only pathname without localhost i.e. /user/contact/1  etc
+var pathname1 = window.location.pathname;
+console.log(pathname1);*/
+
+/* it is provide only origin i.e. localhost:9091 etc */
+var pathnamee = window.location.origin;
+console.log(pathnamee)
+
+
+
+let url=`${pathnamee}/search/${query}`;
+
+
+
 
 fetch(url)
 .then((response)=> {

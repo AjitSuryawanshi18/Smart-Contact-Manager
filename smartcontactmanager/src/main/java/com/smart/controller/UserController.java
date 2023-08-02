@@ -1,6 +1,7 @@
 package com.smart.controller;
 
 import java.io.File;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -79,7 +80,11 @@ public class UserController {
 		return "normal/addContactForm";
 	}
 
+	
+	
+	
 	// proccessing add contact form
+	
 	@PostMapping("/process-contact")
 	public String processContact(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file,
 			Principal principle, HttpSession session) {
@@ -103,9 +108,10 @@ public class UserController {
 
 				// add file to the folder and update the contact
 				contact.setImage(file.getOriginalFilename());
-				File saveFile = new ClassPathResource("static/image").getFile();
 
-				Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+				File saveFile = new ClassPathResource("static/image").getFile().getAbsoluteFile();
+
+				Path path = Paths.get(saveFile + File.separator + file.getOriginalFilename());
 
 				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 

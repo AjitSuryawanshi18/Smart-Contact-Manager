@@ -69,6 +69,7 @@ public class ForgotPassController {
 
 			return "verify_otp";
 //			return "/verify_otp";
+//			"/....." will not work when we deploy our app so dont provide it...
 
 		} else {
 			session.setAttribute("message", "Your otp not sent !! please check your email id  ");
