@@ -9,6 +9,14 @@
 <body>
 	<section>
 
+
+		<div class="container">
+			<marquee class="text-success" width="90%" direction="left" height="50px">
+				Please donate funds here ... we are collecting funds for people who lossed their homes in "Floods" ( lets extend our hands towards our people !! )
+			</marquee>
+		</div>
+
+
 		<div class="container">
 
 			<div class="card col-md-12">
@@ -16,10 +24,12 @@
 					<h5 class="card-title text-success text-center mb-4 my-2">CHANGE PASSWORD</h5>
 					<form th:action="@{/user/change-password}" method="post">
 						<div class="form-group">
-							<input type="password" name="oldPassword" class="form-control" placeholder="Enter Your Old Password..." />
+							<input type="password" name="oldPassword" class="form-control"
+								placeholder="Enter Your Old Password..." />
 						</div>
 						<div class="form-group">
-							<input type="password" name="newPassword" class="form-control mb-3 mt-4" placeholder="Enter Your New Password..." />
+							<input type="password" name="newPassword" class="form-control mb-3 mt-4"
+								placeholder="Enter Your New Password..." />
 						</div>
 						<div class="container text-center">
 							<button type="submit" class="btn btn-outline-primary text-center">Change Password</button>
@@ -31,6 +41,55 @@
 			</div>
 
 		</div>
+
+
+		<!--code for delete user account start-->
+
+
+		<div class="container mt-5">
+
+			<div class="card col-md-12">
+				<div class="card-body">
+
+					<!-- imp note read it--   below message "div" code after user account not deleted it will show or activate on the delete user account button it will be using param. method but it will showing same message i.e. not removes message so we r not using this instead we used session for showing messges and after refersh it will removes messages tooo
+					-->
+
+					<!--using param.
+						<div th:if="${param.notdeleted}" class="alert alert-danger">
+						<p th:text="${param.notdeleted}"></p>
+					</div>-->
+
+					<!--using session. -->
+					<div th:if="${session.message}" th:classappend="${session.message.type}" class="alert" role="alert">
+						<p class="text-center" th:text="${session.message.content}"></p>
+
+						<!--for remove messages-->
+						<th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
+
+					</div>
+
+					<div class="text-center">
+						<h5 class="card-title text-success text-center mb-4 my-2">DELETE MY ACCOUNT</h5>
+						<div class="container text-center">
+							<a class="btn btn-outline-danger btn-lg btn-block mt-4" th:onclick="|deleteUser()|">Delete Account</a>
+
+						</div>
+						<marquee class="text-warning" width="60%" direction="left" height="30px">
+							please be carefull before deleting acount once deleted cant be recovred !!
+						</marquee>
+
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+
+
+		<!--code for delete user account end-->
+
+
 
 		<script>
 

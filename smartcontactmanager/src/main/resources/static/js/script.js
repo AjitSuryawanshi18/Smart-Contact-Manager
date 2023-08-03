@@ -43,7 +43,7 @@ var pathnamee = window.location.origin;
 console.log(pathnamee)
 
 
-
+/*yupp i solved searching bug from SCM */
 let url=`${pathnamee}/search/${query}`;
 
 

@@ -9,6 +9,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
@@ -17,11 +18,13 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,6 +40,8 @@ import com.smart.entities.Contact;
 import com.smart.entities.User;
 import com.smart.helper.Message;
 
+import javassist.NotFoundException;
+
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -46,9 +51,9 @@ public class UserController {
 
 	@Autowired
 	private ContactRepository contactRepository;
-	
+
 	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder ;
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 //	commomData it is used to get user for all the methods and it will available in whole controller
 	@ModelAttribute
@@ -80,11 +85,8 @@ public class UserController {
 		return "normal/addContactForm";
 	}
 
-	
-	
-	
 	// proccessing add contact form
-	
+
 	@PostMapping("/process-contact")
 	public String processContact(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file,
 			Principal principle, HttpSession session) {
@@ -107,15 +109,22 @@ public class UserController {
 			} else {
 
 				// add file to the folder and update the contact
-				contact.setImage(file.getOriginalFilename());
+				String originalFilename = file.getOriginalFilename();
+
+				String randomId = UUID.randomUUID().toString();
+				String renamed_originalFilename = randomId
+						.concat(originalFilename.substring(originalFilename.lastIndexOf(".")));
+
+				contact.setImage(renamed_originalFilename);
 
 				File saveFile = new ClassPathResource("static/image").getFile().getAbsoluteFile();
 
-				Path path = Paths.get(saveFile + File.separator + file.getOriginalFilename());
+				Path path = Paths.get(saveFile + File.separator + renamed_originalFilename);
 
 				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
 				System.out.println("Image is Uploaded...");
+
 			}
 
 			user.getContacts().add(contact);
@@ -126,7 +135,7 @@ public class UserController {
 			session.setAttribute("message",
 					new Message("Your Contact is Added Successfully !! Add MOre.. ", "success"));
 
-			System.out.println("Added to database");
+//			System.out.println("Added to database");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,7 +166,7 @@ public class UserController {
 //		if (!contacts.isEmpty()) {
 //			System.out.println("yes it it not empty ");
 //		}
-		
+
 		model.addAttribute("contacts", contacts);
 		model.addAttribute("currentPage", page);
 		model.addAttribute("totalPages", contacts.getTotalPages());
@@ -167,11 +176,11 @@ public class UserController {
 
 	// show particular contact
 	@RequestMapping("/{cId}/contact")
-	public String showContactDetails(@PathVariable("cId") Integer cId, Model model, Principal principal,@ModelAttribute Contact contact1) {
+	public String showContactDetails(@PathVariable("cId") Integer cId, Model model, Principal principal,
+			@ModelAttribute Contact contact1) {
 
-		model.addAttribute("title ", contact1.getName()+"Profile - Smart Contact Manager");
+		model.addAttribute("title ", contact1.getName() + "Profile - Smart Contact Manager");
 
-		
 		Optional<Contact> contactOptional = this.contactRepository.findById(cId);
 
 		Contact contact = contactOptional.get();
@@ -188,6 +197,9 @@ public class UserController {
 		return "normal/contactDetails";
 	}
 
+	
+	
+	
 	// delete contact handler
 	@GetMapping("/delete/{cId}")
 	public String deleteContact(@PathVariable("cId") Integer cId, Model model, HttpSession session,
@@ -237,15 +249,57 @@ public class UserController {
 
 		return "redirect:/user/show-contacts/0";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 
+	
+	
+	
+	// delete user account permanently
+
+	@GetMapping("/delete_user")
+	public String deleteUser(Model model, HttpSession session, Principal principal) {
+
+		try {
+
+			model.addAttribute("title","deleted Account - Smart Contact Manager");
+
+			
+//				getting user who logged in...
+			String name = principal.getName();
+			User user = this.userRepository.getUserByUserName(name);
+
+//			System.out.println(1/0);
+			
+//			code for delete user account permanently
+			userRepository.delete(user);
+			
+
+
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+//			if account not deleted it will shows error in setting page with session method 
+			session.setAttribute("message", new Message("Something Went Wrong...Your Account is  not deleted !! Plz try Again... ", "danger"));
+
+			return "redirect:/user/settings";
+			
+//			 and below is with param method and successfull deleted account message will be shown with param 
+//			return "redirect:/user/settings?notdeleted=Error Occured Account not Deleted ..!!";
+
+		}
+
+//         redirect to login page after delete user account and shows deleted message on the login page ( with param method )
+		return "redirect:/custom_login?deleted=Your AccounT DeleTed successfully... You Can close this Tab Now...!! ";
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
 	// open update contact form handler
 	@PostMapping("/update-contact/{cId}")
 	public String updateContact(@PathVariable("cId") Integer cId, Model model) {
@@ -258,189 +312,118 @@ public class UserController {
 
 		return "normal/update_contact";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	
 
 	// process update contact handler
-	@RequestMapping(value="/process-update",method = RequestMethod.POST)
-	public String processUpdateContact(@RequestParam("profile_Update-Image") MultipartFile file,@ModelAttribute Contact contact, Principal principle, HttpSession session, Model model) {
-	
+	@RequestMapping(value = "/process-update", method = RequestMethod.POST)
+	public String processUpdateContact(@RequestParam("profile_Update-Image") MultipartFile file,
+			@ModelAttribute Contact contact, Principal principle, HttpSession session, Model model) {
 
 		try {
 
 //			
-//			find old user contact details it is showing no value have fix this...
-			
+//			find old user contact details it is showing no value have to fix this...
+
 //			User oldContactDetails = this.userRepository.findById(contact.getcId()).get();
 
-			
-			//image or file working in update contact case
-			if(!file.isEmpty()) {
+			// image or file working in update contact case
+			if (!file.isEmpty()) {
 //				
 //				delete old photo
-				
-				
+
 //				File deleteFile = new ClassPathResource("static/image").getFile();
-                
+
 //				File file1=new File(deleteFile);
 ////				
 //				file1.delete();
-				
+
 //				update new photo
 //				//here tried to give unique name to the profile picture
-				
-				Random random =new Random();
-				int filename = 100000 + random.nextInt(900000);
+				String originalFilename = file.getOriginalFilename();
 
-				
-				File saveFile = new ClassPathResource("static/image").getFile();
+				String randomId = UUID.randomUUID().toString();
+				String renamed_originalFilename = randomId
+						.concat(originalFilename.substring(originalFilename.lastIndexOf(".")));
 
-				Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename() );
+				File saveFile = new ClassPathResource("static/image").getFile().getAbsoluteFile();
 
-				
-				Files.copy(file.getInputStream(),path,StandardCopyOption.REPLACE_EXISTING);
-				
-				
+				Path path = Paths.get(saveFile + File.separator + renamed_originalFilename);
 
-				contact.setImage(file.getOriginalFilename());
-				
-			}else {
-				
+				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+				contact.setImage(renamed_originalFilename);
+
+			} else {
+
 //				tried something new not working
-				
+
 				contact.setImage(contact.getImage());
-				
+
 			}
 
-			//			this below two lines are important if not used it will delete contact in place of update and only this lines updates all data except image file...
+			// this below two lines are important if not used it will delete contact in
+			// place of update and only this lines updates all data except image file...
 			User user = this.userRepository.getUserByUserName(principle.getName());
-			
+
 			contact.setUser(user);
-		
+
 			this.contactRepository.save(contact);
-			
+
 			session.setAttribute("message", new Message("Your Contact is Updated Successfully", "success"));
-			
+
 		} catch (Exception e) {
 //			System.out.println("in catch block...");
 			e.printStackTrace();
 		}
 
-		return "redirect:/user/"+contact.getcId()+"/contact/";
+		return "redirect:/user/" + contact.getcId() + "/contact/";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 //	handler for your profile option
 	@GetMapping("/your-profile")
-	public String yourProfile(@ModelAttribute Contact contact,Model model) {
-		
-		model.addAttribute("title","Your Profile - Smart Contact Manager");
+	public String yourProfile(@ModelAttribute Contact contact, Model model) {
 
-		
+		model.addAttribute("title", "Your Profile - Smart Contact Manager");
+
 		return "normal/your_profile";
 	}
 
-	
-	
-	
-	
-	
-	
-	//setting handler
+	// setting handler
 	@GetMapping("/settings")
 	public String openSettings() {
-		
-		
+
 		return "normal/settings";
 	}
-	
-	//change password handler
-	@PostMapping("/change-password")
-	public String changePassword(Model model, @RequestParam("oldPassword") String oldPassword,@RequestParam("newPassword") String newPassword,Principal principal,HttpSession session) {
-		
-		model.addAttribute("title","Change Password - Smart Contact Manager");
 
-		
-		System.out.println("old pass "+oldPassword);
-		System.out.println("new pass "+newPassword);
-		
+	// change password handler
+	@PostMapping("/change-password")
+	public String changePassword(Model model, @RequestParam("oldPassword") String oldPassword,
+			@RequestParam("newPassword") String newPassword, Principal principal, HttpSession session) {
+
+		model.addAttribute("title", "Change Password - Smart Contact Manager");
+
+//		System.out.println("old pass " + oldPassword);
+//		System.out.println("new pass " + newPassword);
+
 		String userName = principal.getName();
-		
+
 		User currentUser = this.userRepository.getUserByUserName(userName);
-		
-		if(bCryptPasswordEncoder.matches(oldPassword, currentUser.getPassword())) {
-			//change password
+
+		if (bCryptPasswordEncoder.matches(oldPassword, currentUser.getPassword())) {
+			// change password
 			currentUser.setPassword(this.bCryptPasswordEncoder.encode(newPassword));
 			this.userRepository.save(currentUser);
-			
+
 			session.setAttribute("message", new Message("Password Changed Successfully..!!", "success"));
 
-			
-		}else {
-			//wrong old pass not change 
+		} else {
+			// wrong old pass not change
 			session.setAttribute("message", new Message("PLease Enter Correct old Password..!!", "danger"));
 
 			return "redirect:/user/settings";
 		}
-		
+
 		return "redirect:/user/index";
-		
+
 	}
-	
+
 }

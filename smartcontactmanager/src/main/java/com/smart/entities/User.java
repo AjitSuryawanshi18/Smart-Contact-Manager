@@ -56,7 +56,8 @@ public class User {
 	@Column(length = 500)
 	private String about;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,mappedBy ="user")
+//	orphanRemoval = true --> it will help to remove associated child once parent removed
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true,mappedBy ="user")
 	private List<Contact> contacts =new ArrayList<>();
 	
 	public int getId() {
